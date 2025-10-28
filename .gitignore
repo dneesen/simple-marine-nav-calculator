@@ -148,3 +148,6 @@ $RECYCLE.BIN/
 *_TEST_*.md
 *_FIX.md
 test-*.md
+
+## Published executables (use GitHub Releases instead)
+publish/
