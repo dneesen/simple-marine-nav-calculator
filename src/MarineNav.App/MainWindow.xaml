@@ -1,0 +1,85 @@
+﻿<Window x:Class="MarineNav.App.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MarineNav.App"
+        xmlns:views="clr-namespace:MarineNav.App.Views"
+        mc:Ignorable="d"
+        Title="Marine Navigation Utility" Height="700" Width="1000" 
+        WindowStartupLocation="CenterScreen"
+        Background="{DynamicResource WindowBackgroundBrush}">
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVisibility"/>
+        
+        <!-- NullToVisibilityConverter for error messages -->
+        <local:NullToVisibilityConverter x:Key="NullToVisibilityConverter"/>
+    </Window.Resources>
+    
+    <Window.CommandBindings>
+        <!-- Keyboard shortcuts -->
+        <CommandBinding Command="New" Executed="NewRoute_Executed"/>
+        <CommandBinding Command="Open" Executed="ImportGpx_Executed"/>
+        <CommandBinding Command="Save" Executed="ExportGpx_Executed"/>
+        <CommandBinding Command="Print" Executed="Print_Executed"/>
+    </Window.CommandBindings>
+    
+    <Window.InputBindings>
+        <!-- Ctrl+N: New Route -->
+        <KeyBinding Key="N" Modifiers="Control" Command="New"/>
+        <!-- Ctrl+O: Open/Import GPX -->
+        <KeyBinding Key="O" Modifiers="Control" Command="Open"/>
+        <!-- Ctrl+S: Save/Export GPX -->
+        <KeyBinding Key="S" Modifiers="Control" Command="Save"/>
+        <!-- Ctrl+P: Print -->
+        <KeyBinding Key="P" Modifiers="Control" Command="Print"/>
+        <!-- Ctrl+I: Import GPX (alternative) -->
+        <KeyBinding Key="I" Modifiers="Control" Command="Open"/>
+        <!-- Ctrl+E: Export GPX (alternative) -->
+        <KeyBinding Key="E" Modifiers="Control" Command="Save"/>
+    </Window.InputBindings>
+    
+    <DockPanel>
+        <!-- Menu Bar -->
+        <Menu DockPanel.Dock="Top" Background="{DynamicResource PanelBackgroundBrush}">
+            <MenuItem Header="_File" Foreground="{DynamicResource PrimaryTextBrush}">
+                <MenuItem Header="_New Route" Command="New" InputGestureText="Ctrl+N"/>
+                <MenuItem Header="_Import GPX" Command="Open" InputGestureText="Ctrl+O"/>
+                <MenuItem Header="_Export GPX" Command="Save" InputGestureText="Ctrl+S"/>
+                <Separator/>
+                <MenuItem Header="_Print" Command="Print" InputGestureText="Ctrl+P"/>
+                <Separator/>
+                <MenuItem Header="E_xit" Click="Exit_Click"/>
+            </MenuItem>
+            <MenuItem Header="_View" Foreground="{DynamicResource PrimaryTextBrush}">
+                <MenuItem Header="Toggle _Theme" Click="ToggleTheme_Click" InputGestureText="Ctrl+T">
+                    <MenuItem.Icon>
+                        <TextBlock Text="🌓" FontSize="14"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+            </MenuItem>
+        </Menu>
+        
+        <!-- Main Content -->
+        <Grid Margin="10">
+            <TabControl Background="{DynamicResource ContentBackgroundBrush}">
+                <TabItem Header="Coordinate Converter">
+                    <TabItem.HeaderTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="Coordinate Converter" Foreground="{DynamicResource PrimaryTextBrush}"/>
+                        </DataTemplate>
+                    </TabItem.HeaderTemplate>
+                    <views:ConverterView/>
+                </TabItem>
+                <TabItem Header="Route Planner">
+                    <TabItem.HeaderTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="Route Planner" Foreground="{DynamicResource PrimaryTextBrush}"/>
+                        </DataTemplate>
+                    </TabItem.HeaderTemplate>
+                    <views:RoutePlannerView/>
+                </TabItem>
+            </TabControl>
+        </Grid>
+    </DockPanel>
+</Window>

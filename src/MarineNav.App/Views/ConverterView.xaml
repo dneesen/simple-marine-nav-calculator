@@ -1,0 +1,193 @@
+<UserControl x:Class="MarineNav.App.Views.ConverterView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:vm="clr-namespace:MarineNav.App.ViewModels"
+             mc:Ignorable="d" 
+             d:DesignHeight="600" d:DesignWidth="800">
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVisibility"/>
+    </UserControl.Resources>
+    
+    <UserControl.DataContext>
+        <vm:ConverterViewModel/>
+    </UserControl.DataContext>
+    
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <TextBlock Grid.Row="0" Text="Coordinate Converter" 
+                   FontSize="24" FontWeight="Bold" Margin="0,0,0,10"/>
+
+        <!-- Input Section - Single Line -->
+        <Border Grid.Row="2" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" 
+                CornerRadius="4" Padding="15" Background="{DynamicResource PanelBackgroundBrush}">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="10"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="15"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="15"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Grid.Row="0" Grid.Column="0" Text="Latitude:" 
+                           VerticalAlignment="Center" FontWeight="SemiBold" Margin="0,0,10,0"/>
+                <TextBox Grid.Row="0" Grid.Column="1" 
+                         Text="{Binding LatitudeInput, UpdateSourceTrigger=PropertyChanged}"
+                         FontSize="14" Padding="5" MinWidth="180"/>
+
+                <TextBlock Grid.Row="0" Grid.Column="3" Text="Longitude:" 
+                           VerticalAlignment="Center" FontWeight="SemiBold" Margin="0,0,10,0"/>
+                <TextBox Grid.Row="0" Grid.Column="4" 
+                         Text="{Binding LongitudeInput, UpdateSourceTrigger=PropertyChanged}"
+                         FontSize="14" Padding="5" MinWidth="180"/>
+
+                <Button Grid.Row="0" Grid.Column="6" Content="Convert" 
+                        Command="{Binding ConvertCommand}"
+                        Padding="30,8" FontSize="14" FontWeight="SemiBold" Background="{DynamicResource AccentBrush}" Foreground="{DynamicResource PrimaryTextBrush}" BorderThickness="0"/>
+
+                <!-- Error Message -->
+                <TextBlock Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="7"
+                           Text="{Binding ErrorMessage}" 
+                           Foreground="{DynamicResource ErrorBrush}" FontStyle="Italic"
+                           Visibility="{Binding HasError, Converter={StaticResource BoolToVisibility}}"/>
+            </Grid>
+        </Border>
+
+        <!-- Output Section - Two Columns -->
+        <Border Grid.Row="4" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" 
+                CornerRadius="4" Padding="15" Background="{DynamicResource ContentBackgroundBrush}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="30"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Latitude Column -->
+                <StackPanel Grid.Column="0">
+                    <TextBlock Text="Latitude" FontSize="16" FontWeight="Bold" Margin="0,0,0,15"/>
+                    
+                    <TextBlock Text="Decimal Degrees:" FontWeight="SemiBold" Margin="0,0,0,5"/>
+                    <Grid Margin="0,0,0,10">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="10"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBox Grid.Column="0" Text="{Binding LatitudeDecimal, Mode=OneWay}" 
+                                 IsReadOnly="True" FontSize="14" Padding="5"/>
+                        <Button Grid.Column="2" Content="Copy" 
+                                Command="{Binding CopyCommand}" 
+                                CommandParameter="{Binding LatitudeDecimal}"
+                                Padding="8,5" MinWidth="60"/>
+                    </Grid>
+
+                    <TextBlock Text="Degrees Decimal Minutes:" FontWeight="SemiBold" Margin="0,0,0,5"/>
+                    <Grid Margin="0,0,0,10">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="10"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBox Grid.Column="0" Text="{Binding LatitudeDM, Mode=OneWay}" 
+                                 IsReadOnly="True" FontSize="14" Padding="5"/>
+                        <Button Grid.Column="2" Content="Copy" 
+                                Command="{Binding CopyCommand}" 
+                                CommandParameter="{Binding LatitudeDM}"
+                                Padding="8,5" MinWidth="60"/>
+                    </Grid>
+
+                    <TextBlock Text="Degrees Minutes Seconds:" FontWeight="SemiBold" Margin="0,0,0,5"/>
+                    <Grid Margin="0,0,0,10">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="10"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBox Grid.Column="0" Text="{Binding LatitudeDMS, Mode=OneWay}" 
+                                 IsReadOnly="True" FontSize="14" Padding="5"/>
+                        <Button Grid.Column="2" Content="Copy" 
+                                Command="{Binding CopyCommand}" 
+                                CommandParameter="{Binding LatitudeDMS}"
+                                Padding="8,5" MinWidth="60"/>
+                    </Grid>
+
+                    <Button Content="Swap N/S" 
+                            Command="{Binding SwapLatitudeHemisphereCommand}"
+                            Padding="10,5" HorizontalAlignment="Left" MinWidth="100"/>
+                </StackPanel>
+
+                <!-- Longitude Column -->
+                <StackPanel Grid.Column="2">
+                    <TextBlock Text="Longitude" FontSize="16" FontWeight="Bold" Margin="0,0,0,15"/>
+                    
+                    <TextBlock Text="Decimal Degrees:" FontWeight="SemiBold" Margin="0,0,0,5"/>
+                    <Grid Margin="0,0,0,10">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="10"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBox Grid.Column="0" Text="{Binding LongitudeDecimal, Mode=OneWay}" 
+                                 IsReadOnly="True" FontSize="14" Padding="5"/>
+                        <Button Grid.Column="2" Content="Copy" 
+                                Command="{Binding CopyCommand}" 
+                                CommandParameter="{Binding LongitudeDecimal}"
+                                Padding="8,5" MinWidth="60"/>
+                    </Grid>
+
+                    <TextBlock Text="Degrees Decimal Minutes:" FontWeight="SemiBold" Margin="0,0,0,5"/>
+                    <Grid Margin="0,0,0,10">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="10"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBox Grid.Column="0" Text="{Binding LongitudeDM, Mode=OneWay}" 
+                                 IsReadOnly="True" FontSize="14" Padding="5"/>
+                        <Button Grid.Column="2" Content="Copy" 
+                                Command="{Binding CopyCommand}" 
+                                CommandParameter="{Binding LongitudeDM}"
+                                Padding="8,5" MinWidth="60"/>
+                    </Grid>
+
+                    <TextBlock Text="Degrees Minutes Seconds:" FontWeight="SemiBold" Margin="0,0,0,5"/>
+                    <Grid Margin="0,0,0,10">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="10"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBox Grid.Column="0" Text="{Binding LongitudeDMS, Mode=OneWay}" 
+                                 IsReadOnly="True" FontSize="14" Padding="5"/>
+                        <Button Grid.Column="2" Content="Copy" 
+                                Command="{Binding CopyCommand}" 
+                                CommandParameter="{Binding LongitudeDMS}"
+                                Padding="8,5" MinWidth="60"/>
+                    </Grid>
+
+                    <Button Content="Swap E/W" 
+                            Command="{Binding SwapLongitudeHemisphereCommand}"
+                            Padding="10,5" HorizontalAlignment="Left" MinWidth="100"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>
